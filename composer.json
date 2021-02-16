@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*"
@@ -23,7 +24,8 @@
     },
     "autoload": {
         "files": [
-            "src/Doc.php"
+            "src/Doc.php",
+            "src/Differ.php"
         ]
     }
 }

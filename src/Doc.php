@@ -1,12 +1,14 @@
 <?php
 
-namespace Gendiff\Doc;
+namespace Differ\Doc;
 
 use Docopt;
 
-function getDoc()
+use function Differ\Differ\genDiff;
+
+function getDoc(): string
 {
-    $doc = <<<'DOCOPT'
+    return <<<'DOCOPT'
 Generate diff
 
 Usage:
@@ -19,11 +21,17 @@ Options:
   -v --version                  Show version
   --format <fmt>                Report format [default: stylish]
 DOCOPT;
+}
 
+function run(): void
+{
     $params = [
         'help' => true,
         'version' => '0.1.0'
     ];
 
-    Docopt::handle($doc, $params);
+    $args = Docopt::handle(getDoc(), $params);
+    if (isset($args['<firstFile>'])) {
+        genDiff($args['<firstFile>'], $args['<secondFile>']);
+    }
 }
