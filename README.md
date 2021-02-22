@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/BenGunn87/php-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/BenGunn87/php-project-lvl2/actions)
 [![Actions Status](https://github.com/BenGunn87/php-project-lvl2/workflows/Linter/badge.svg)](https://github.com/BenGunn87/php-project-lvl2/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/036d17f4a3cf3b813a78/maintainability)](https://codeclimate.com/github/BenGunn87/php-project-lvl2/maintainability)
-[![Test Coverage](https://codeclimate.com/github/hexlet-boilerplates/php-package/badges/coverage.svg)](https://codeclimate.com/github/BenGunn87/php-project-lvl2/coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4530875912746b37ac36/test_coverage)](https://codeclimate.com/github/BenGunn87/php-project-lvl2/test_coverage)
 
 The project contains a function to calculate difference between two dataset  
 ### Installation
