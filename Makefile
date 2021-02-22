@@ -8,4 +8,7 @@ lint:
 	composer run-script phpcs -- --standard=PSR12 src bin
 
 test:
-	vendor/bin/phpunit ./src/Tests
+	composer exec --verbose phpunit ./src/Tests
+
+test-coverage:
+	composer exec --verbose phpunit ./src/Tests -- --coverage-clover build/logs/clover.xml
