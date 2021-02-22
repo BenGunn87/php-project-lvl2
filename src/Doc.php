@@ -32,6 +32,7 @@ function run(): void
 
     $args = Docopt::handle(getDoc(), $params);
     if (isset($args['<firstFile>'])) {
-        genDiff($args['<firstFile>'], $args['<secondFile>']);
+        $diff = genDiff($args['<firstFile>'], $args['<secondFile>']);
+        print_r($diff);
     }
 }

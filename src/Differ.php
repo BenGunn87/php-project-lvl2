@@ -43,9 +43,9 @@ function getDataFromFile(string $path)
     return json_decode($content, true);
 }
 
-function genDiff(string $pathToOldFile, string $pathToNewFile): void
+function genDiff(string $pathToOldFile, string $pathToNewFile): string
 {
     $data1 = getDataFromFile($pathToOldFile);
     $data2 = getDataFromFile($pathToNewFile);
-    print_r(calcDiff($data1, $data2));
+    return calcDiff($data1, $data2);
 }
