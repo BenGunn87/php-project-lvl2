@@ -1,0 +1,25 @@
+name: Tests
+
+on: push
+
+jobs:
+  lint:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        # Step's name
+      - name: Setup PHP
+        # Action gives to setup the PHP environment to test application
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          # Specify the PHP version
+          php-version: '7.4'
+      - name: Install
+        # Install project
+        run: make install
+      - name: Run phpunit test
+        run: make test
