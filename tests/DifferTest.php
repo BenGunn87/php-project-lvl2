@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Tests;
+namespace Differ;
 
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +20,7 @@ class DifferTest extends TestCase
 + verbose: true
 }
 EOD;
-        $actualDiff = genDiff('./src/Tests/fixtures/file1.json', './src/Tests/fixtures/file2.json');
+        $actualDiff = genDiff('./tests/fixtures/file1.json', './tests/fixtures/file2.json');
         $this->assertEquals($expectedDiff, $actualDiff);
     }
 }
