@@ -2,6 +2,8 @@
 
 namespace Differ\Differ;
 
+use function Differ\Parsers\parse;
+
 function varToString($value): string
 {
     if (is_bool($value)) {
@@ -36,11 +38,12 @@ function calcDiff(array $oldData, array $newData): string
     return implode(PHP_EOL, $result);
 }
 
-function getDataFromFile(string $path)
+function getDataFromFile(string $path): array
 {
     $absolutePath = $path[0] === '/' ? $path : getcwd() . '/' . $path;
     $content = file_get_contents($absolutePath);
-    return json_decode($content, true);
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    return parse($content, $ext);
 }
 
 function genDiff(string $pathToOldFile, string $pathToNewFile): string

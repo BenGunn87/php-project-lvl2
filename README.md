@@ -9,4 +9,7 @@ The project contains a function to calculate difference between two dataset
 To install, run the command `make install`
 
 ### Example  
-[![asciicast](https://asciinema.org/a/6weDkhzjtz5fvBGgYJaplZ9Kv.svg)](https://asciinema.org/a/6weDkhzjtz5fvBGgYJaplZ9Kv)
+#### JSON files  
+[![asciicast](https://asciinema.org/a/6weDkhzjtz5fvBGgYJaplZ9Kv.svg)](https://asciinema.org/a/6weDkhzjtz5fvBGgYJaplZ9Kv)  
+#### YAML files  
+[![asciicast](https://asciinema.org/a/EmoRU3Wn1hR1n7rcm4Js0zmIo.svg)](https://asciinema.org/a/EmoRU3Wn1hR1n7rcm4Js0zmIo)  
