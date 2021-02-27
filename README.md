@@ -15,3 +15,6 @@ To install, run the command `make install`
 [![asciicast](https://asciinema.org/a/EmoRU3Wn1hR1n7rcm4Js0zmIo.svg)](https://asciinema.org/a/EmoRU3Wn1hR1n7rcm4Js0zmIo)  
 #### Complex data  
 [![asciicast](https://asciinema.org/a/qOhIDCNga7w0l9j8a6vkaSfnV.svg)](https://asciinema.org/a/qOhIDCNga7w0l9j8a6vkaSfnV)  
+#### Plain format  
+`gendiff --format plain <firstFile> <secondFile>` 
+[![asciicast](https://asciinema.org/a/tHHft6FX5tzfc9t2UcEzGlQJ5.svg)](https://asciinema.org/a/tHHft6FX5tzfc9t2UcEzGlQJ5)  

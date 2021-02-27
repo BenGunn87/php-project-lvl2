@@ -3,16 +3,18 @@
 namespace Differ\TreeBuilder;
 
 const ADDED = 'added';
-const DELETED = 'deleted';
+const REMOVED = 'removed';
+const UPDATED = 'updated';
 const NOT_CHANGED = 'notChanged';
 const COMPLEX_VALUE = 'complexValue';
 
-function createTreeNode(string $key, $value, string $action, int $level): array
+function createTreeNode(string $key, $value, string $action, int $level, $newValue = null): array
 {
     return [
         'key' => $key,
         'action' => $action,
         'value' => $value,
+        'newValue' => $newValue,
         'level' => $level,
     ];
 }
@@ -23,7 +25,7 @@ function processElem(string $key, $value, array $oldData, array $newData, int $l
         return [createTreeNode($key, $value, ADDED, $level)];
     }
     if (!array_key_exists($key, $newData)) {
-        return [createTreeNode($key, $value, DELETED, $level)];
+        return [createTreeNode($key, $value, REMOVED, $level)];
     }
     if ($value === $oldData[$key]) {
         return [createTreeNode($key, $value, NOT_CHANGED, $level)];
@@ -36,10 +38,7 @@ function processElem(string $key, $value, array $oldData, array $newData, int $l
             $level
         )];
     }
-    return [
-        createTreeNode($key, $oldData[$key], DELETED, $level),
-        createTreeNode($key, $value, ADDED, $level)
-    ];
+    return [createTreeNode($key, $oldData[$key], UPDATED, $level, $value)];
 }
 
 function createDiffTree(object $oldData, object $newData, int $level): array

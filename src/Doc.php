@@ -6,6 +6,8 @@ use Docopt;
 
 use function Differ\Differ\genDiff;
 
+use const Differ\Formatters\STYLISH;
+
 function getDoc(): string
 {
     return <<<'DOCOPT'
@@ -32,7 +34,8 @@ function run(): void
 
     $args = Docopt::handle(getDoc(), $params);
     if (isset($args['<firstFile>'])) {
-        $diff = genDiff($args['<firstFile>'], $args['<secondFile>']);
+        $formatName = $args['--format'] ?? STYLISH;
+        $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $formatName);
         print_r($diff);
     }
 }

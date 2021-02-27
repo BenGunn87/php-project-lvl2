@@ -2,6 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 use function Differ\TreeBuilder\getDiffTree;
+use const Differ\TreeBuilder\ADDED;
+use const Differ\TreeBuilder\NOT_CHANGED;
+use const Differ\TreeBuilder\REMOVED;
+use const Differ\TreeBuilder\UPDATED;
 
 class TreeBuilderTest extends TestCase
 {
@@ -20,32 +24,30 @@ class TreeBuilderTest extends TestCase
         $expectedTree = [
             [
                 'key' => 'key1',
-                'action' => 'notChanged',
+                'action' => NOT_CHANGED,
                 'value' => 100,
+                'newValue' => null,
                 'level' => 0,
             ],
             [
                 'key' => 'key2',
-                'action' => 'deleted',
+                'action' => UPDATED,
                 'value' => 'test',
-                'level' => 0,
-            ],
-            [
-                'key' => 'key2',
-                'action' => 'added',
-                'value' => 'test_2',
+                'newValue' => 'test_2',
                 'level' => 0,
             ],
             [
                 'key' => 'key3',
-                'action' => 'deleted',
+                'action' => REMOVED,
                 'value' => true,
+                'newValue' => null,
                 'level' => 0,
             ],
             [
                 'key' => 'key4',
-                'action' => 'added',
+                'action' => ADDED,
                 'value' => true,
+                'newValue' => null,
                 'level' => 0,
             ],
         ];
