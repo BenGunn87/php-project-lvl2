@@ -28,7 +28,9 @@
         "files": [
             "src/Doc.php",
             "src/Differ.php",
-            "src/Parsers.php"
+            "src/Parsers.php",
+            "src/TreeBuilder.php",
+            "src/Stylish.php"
         ]
     }
 }

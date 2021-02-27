@@ -1,42 +1,110 @@
 <?php
 
-namespace Differ;
-
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    public function test_genDiff_jsonFile()
+    public function test_genDiff_complexJson()
     {
         $expectedDiff = <<<'EOD'
 {
-- follow: false
-  host: hexlet.io
-- proxy: 123.234.53.22
-- timeout: 50
-+ timeout: 20
-+ verbose: true
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
 }
 EOD;
-        $actualDiff = genDiff('./tests/fixtures/file1.json', './tests/fixtures/file2.json');
+        $actualDiff = genDiff($this->getAbsFilePath('oldComplexData.json'), $this->getAbsFilePath('newComplexData.json'));
         $this->assertEquals($expectedDiff, $actualDiff);
     }
 
-    public function test_genDiff_ymlFile()
+    public function test_genDiff_complexYaml()
     {
         $expectedDiff = <<<'EOD'
 {
-- follow: false
-  host: hexlet.io
-- proxy: 123.234.53.22
-- timeout: 50
-+ timeout: 20
-+ verbose: true
+    common: {
+      + follow: false
+        setting1: Value 1
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + foo: bar
+      - nest: {
+            key: value
+        }
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+    }
 }
 EOD;
-        $actualDiff = genDiff('./tests/fixtures/oldData1.yml', './tests/fixtures/newData1.yml');
+        $actualDiff = genDiff($this->getAbsFilePath('oldComplexData.yml'), $this->getAbsFilePath('newComplexData.yml'));
         $this->assertEquals($expectedDiff, $actualDiff);
+    }
+
+    private function getAbsFilePath($path)
+    {
+        return __DIR__ . '/fixtures/' . $path;
     }
 }
