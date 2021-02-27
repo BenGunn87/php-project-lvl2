@@ -22,26 +22,31 @@ class TreeBuilderTest extends TestCase
                 'key' => 'key1',
                 'action' => 'notChanged',
                 'value' => 100,
+                'level' => 0,
             ],
             [
                 'key' => 'key2',
                 'action' => 'deleted',
                 'value' => 'test',
+                'level' => 0,
             ],
             [
                 'key' => 'key2',
                 'action' => 'added',
-                'value' => 'test_2'
+                'value' => 'test_2',
+                'level' => 0,
             ],
             [
                 'key' => 'key3',
                 'action' => 'deleted',
                 'value' => true,
+                'level' => 0,
             ],
             [
                 'key' => 'key4',
                 'action' => 'added',
                 'value' => true,
+                'level' => 0,
             ],
         ];
         $tree = getDiffTree((object) $oldData, (object) $newData);
