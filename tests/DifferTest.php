@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
+use const Differ\Formatters\JSON;
 use const Differ\Formatters\PLAIN;
 use const Differ\Formatters\STYLISH;
 
@@ -132,6 +133,17 @@ EOD;
             $this->getAbsFilePath('oldComplexData.json'),
             $this->getAbsFilePath('newComplexData.json'),
             PLAIN
+        );
+        $this->assertEquals($expectedDiff, $actualDiff);
+    }
+
+    public function test_genDiff_complexJson_jsonFormat()
+    {
+        $expectedDiff = file_get_contents($this->getAbsFilePath('diffComplexData.json'));
+        $actualDiff = genDiff(
+            $this->getAbsFilePath('oldComplexData.json'),
+            $this->getAbsFilePath('newComplexData.json'),
+            JSON
         );
         $this->assertEquals($expectedDiff, $actualDiff);
     }

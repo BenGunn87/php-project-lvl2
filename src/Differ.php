@@ -4,7 +4,7 @@ namespace Differ\Differ;
 
 use function Differ\Formatters\getFormatter;
 use function Differ\Parsers\parse;
-use function Differ\TreeBuilder\getDiffTree;
+use function Differ\TreeBuilder\createDiffTree;
 
 function getDataFromFile(string $path): object
 {
@@ -18,7 +18,7 @@ function genDiff(string $pathToOldFile, string $pathToNewFile, string $formatNam
 {
     $oldData = getDataFromFile($pathToOldFile);
     $newData = getDataFromFile($pathToNewFile);
-    $diffTree = getDiffTree($oldData, $newData);
+    $diffTree = createDiffTree($oldData, $newData);
     $formatter = getFormatter($formatName);
     return $formatter($diffTree);
 }

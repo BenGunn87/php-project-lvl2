@@ -36,9 +36,9 @@ function valueToString($value, int $level = 0): string
         : simpleValueToString($value);
 }
 
-function stylishNode(array $node): string
+function stylishNode(array $node, int $level): string
 {
-    ['key' => $key, 'action' => $action, 'value' => $value, 'level' => $level, 'newValue' => $newValue] = $node;
+    ['key' => $key, 'action' => $action, 'value' => $value, 'newValue' => $newValue] = $node;
     $indent = str_repeat('    ', $level);
     switch ($action) {
         case ADDED:
@@ -57,8 +57,8 @@ function stylishNode(array $node): string
 
 function stylishWithLevel(array $tree, int $level): string
 {
-    $stylishTree = array_map(function ($node) {
-        return stylishNode($node);
+    $stylishTree = array_map(function ($node) use ($level) {
+        return stylishNode($node, $level);
     }, $tree);
     $indent = str_repeat('    ', $level);
     $result = array_merge(['{'], $stylishTree, ["$indent}"]);

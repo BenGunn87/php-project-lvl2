@@ -18,3 +18,6 @@ To install, run the command `make install`
 #### Plain format  
 `gendiff --format plain <firstFile> <secondFile>` 
 [![asciicast](https://asciinema.org/a/tHHft6FX5tzfc9t2UcEzGlQJ5.svg)](https://asciinema.org/a/tHHft6FX5tzfc9t2UcEzGlQJ5)  
+#### JSON format
+`gendiff --format json <firstFile> <secondFile>`
+[![asciicast](https://asciinema.org/a/2FDKiUwREoPKQnaqD0WsCR6rY.svg)](https://asciinema.org/a/2FDKiUwREoPKQnaqD0WsCR6rY)  

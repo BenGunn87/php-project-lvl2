@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use function Differ\TreeBuilder\getDiffTree;
+use function Differ\TreeBuilder\createDiffTree;
 use const Differ\TreeBuilder\ADDED;
 use const Differ\TreeBuilder\NOT_CHANGED;
 use const Differ\TreeBuilder\REMOVED;
@@ -26,32 +26,25 @@ class TreeBuilderTest extends TestCase
                 'key' => 'key1',
                 'action' => NOT_CHANGED,
                 'value' => 100,
-                'newValue' => null,
-                'level' => 0,
             ],
             [
                 'key' => 'key2',
                 'action' => UPDATED,
                 'value' => 'test',
                 'newValue' => 'test_2',
-                'level' => 0,
             ],
             [
                 'key' => 'key3',
                 'action' => REMOVED,
                 'value' => true,
-                'newValue' => null,
-                'level' => 0,
             ],
             [
                 'key' => 'key4',
                 'action' => ADDED,
                 'value' => true,
-                'newValue' => null,
-                'level' => 0,
             ],
         ];
-        $tree = getDiffTree((object) $oldData, (object) $newData);
+        $tree = createDiffTree((object) $oldData, (object) $newData);
         $this->assertEquals($expectedTree, $tree);
     }
 }
