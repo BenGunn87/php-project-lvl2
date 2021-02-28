@@ -21,7 +21,8 @@
             {
                 "key": "setting3",
                 "action": "updated",
-                "value": true
+                "value": true,
+                "newValue": null
             },
             {
                 "key": "setting4",

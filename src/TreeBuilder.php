@@ -8,16 +8,19 @@ const UPDATED = 'updated';
 const NOT_CHANGED = 'notChanged';
 const COMPLEX_VALUE = 'complexValue';
 
-function createTreeNode(string $key, $value, string $action, $newValue = null): array
+function createTreeNode(string $key, $value, string $action): array
 {
-    $result = [
+    return [
         'key' => $key,
         'action' => $action,
         'value' => $value,
     ];
-    if ($newValue !== null) {
-        $result['newValue'] = $newValue;
-    }
+}
+
+function createUpdatedTreeNode(string $key, $value, string $action, $newValue): array
+{
+    $result = createTreeNode( $key, $value, $action);
+    $result['newValue'] = $newValue;
     return $result;
 }
 
@@ -39,7 +42,7 @@ function processElem(string $key, $value, array $oldData, array $newData): array
             COMPLEX_VALUE
         )];
     }
-    return [createTreeNode($key, $oldData[$key], UPDATED, $value)];
+    return [createUpdatedTreeNode($key, $oldData[$key], UPDATED, $value)];
 }
 
 function createDiffTree(object $oldData, object $newData): array
