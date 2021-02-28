@@ -38,7 +38,7 @@ function valueToString($value, int $level = 0): string
 
 function stylishNode(array $node, int $level): string
 {
-    ['key' => $key, 'action' => $action, 'value' => $value, 'newValue' => $newValue] = $node;
+    ['key' => $key, 'action' => $action, 'value' => $value] = $node;
     $indent = str_repeat('    ', $level);
     switch ($action) {
         case ADDED:
@@ -46,6 +46,7 @@ function stylishNode(array $node, int $level): string
         case REMOVED:
             return "$indent  - $key: " . valueToString($value, $level);
         case UPDATED:
+            $newValue = $node['newValue'];
             return "$indent  - $key: " . valueToString($value, $level) . PHP_EOL .
                 "$indent  + $key: " . valueToString($newValue, $level);
         case COMPLEX_VALUE:

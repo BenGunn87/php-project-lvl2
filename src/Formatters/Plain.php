@@ -30,13 +30,14 @@ function valueToString($value): string
 
 function formattedNode(array $node, string $path): string
 {
-    ['key' => $key, 'action' => $action, 'value' => $value, 'level' => $level, 'newValue' => $newValue] = $node;
+    ['key' => $key, 'action' => $action, 'value' => $value] = $node;
     switch ($action) {
         case ADDED:
             return "Property '{$path}{$key}' was added with value: " . valueToString($value);
         case REMOVED:
             return "Property '{$path}{$key}' was removed";
         case UPDATED:
+            $newValue = $node['newValue'];
             return "Property '{$path}{$key}' was updated. From " . valueToString($value) .
                 " to " . valueToString($newValue);
         case COMPLEX_VALUE:
