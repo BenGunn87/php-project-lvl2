@@ -19,7 +19,7 @@ function createTreeNode(string $key, $value, string $action): array
 
 function createUpdatedTreeNode(string $key, $value, string $action, $newValue): array
 {
-    $result = createTreeNode( $key, $value, $action);
+    $result = createTreeNode($key, $value, $action);
     $result['newValue'] = $newValue;
     return $result;
 }
