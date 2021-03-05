@@ -7,15 +7,28 @@ use const Differ\TreeBuilder\COMPLEX_VALUE;
 use const Differ\TreeBuilder\REMOVED;
 use const Differ\TreeBuilder\UPDATED;
 
+const INDENT_CHARS = '    ';
+const ADDED_ITEM_PREFIX = '  + ';
+const REMOVED_ITEM_PREFIX = '  - ';
+const NOT_CHANGED_ITEM_PREFIX = INDENT_CHARS;
+
 function objectToString($value, int $level = 0): string
 {
-    $result = ['{'];
-    $indent = str_repeat('    ', $level);
-    foreach ((array) $value as $key => $item) {
-        $result[] = "$indent    $key: " . valueToString($item, $level);
-    }
-    $result[] = "$indent}";
-    return implode(PHP_EOL, $result);
+    $indent = str_repeat(INDENT_CHARS, $level);
+    $indentForValue = str_repeat(INDENT_CHARS, $level + 1);
+    $preparedData = (array) $value;
+    $result = array_map(
+        function (string $key, $item) use ($indentForValue, $level): string {
+            return "{$indentForValue}{$key}: " . valueToString($item, $level);
+        },
+        array_keys($preparedData),
+        $preparedData
+    );
+
+    return implode(
+        PHP_EOL,
+        array_merge(["{"], $result, ["$indent}"])
+    );
 }
 
 function simpleValueToString($value): string
@@ -24,7 +37,7 @@ function simpleValueToString($value): string
         return $value ? "true" : "false";
     }
     if ($value === null) {
-        return 'null';
+        return "null";
     }
     return (string) $value;
 }
@@ -38,35 +51,46 @@ function valueToString($value, int $level = 0): string
 
 function stylishNode(array $node, int $level): string
 {
-    ['key' => $key, 'action' => $action, 'value' => $value] = $node;
-    $indent = str_repeat('    ', $level);
+    ['key' => $key, 'action' => $action] = $node;
+    $indent = str_repeat(INDENT_CHARS, $level);
+    if ($action === COMPLEX_VALUE) {
+        $children = $node['children'];
+        return $indent . NOT_CHANGED_ITEM_PREFIX . "$key: " . stylishWithLevel($children, $level + 1);
+    }
+
+    $preparedValue = valueToString($node['value'], $level);
     switch ($action) {
         case ADDED:
-            return "$indent  + $key: " . valueToString($value, $level);
+            $result = $indent . ADDED_ITEM_PREFIX . "$key: $preparedValue";
+            break;
         case REMOVED:
-            return "$indent  - $key: " . valueToString($value, $level);
+            $result = $indent . REMOVED_ITEM_PREFIX . "$key: $preparedValue";
+            break;
         case UPDATED:
             $newValue = $node['newValue'];
-            return "$indent  - $key: " . valueToString($value, $level) . PHP_EOL .
-                "$indent  + $key: " . valueToString($newValue, $level);
-        case COMPLEX_VALUE:
-            return "$indent    $key: " . stylishWithLevel($value, $level + 1);
+            $result = $indent . REMOVED_ITEM_PREFIX . "$key: $preparedValue" . PHP_EOL .
+                $indent . ADDED_ITEM_PREFIX . "$key: " . valueToString($newValue, $level);
+            break;
         default:
-            return "$indent    $key: " . valueToString($value, $level);
+            $result = $indent . NOT_CHANGED_ITEM_PREFIX . "$key: $preparedValue";
     }
+
+    return $result;
 }
 
 function stylishWithLevel(array $tree, int $level): string
 {
-    $stylishTree = array_map(function ($node) use ($level) {
+    $result = array_map(function ($node) use ($level): string {
         return stylishNode($node, $level);
     }, $tree);
-    $indent = str_repeat('    ', $level);
-    $result = array_merge(['{'], $stylishTree, ["$indent}"]);
-    return implode(PHP_EOL, $result);
+    $indent = str_repeat(INDENT_CHARS, $level);
+    return implode(
+        PHP_EOL,
+        array_merge(['{'], $result, ["$indent}"])
+    );
 }
 
-function stylish(array $tree): string
+function formattedToStylish(array $tree): string
 {
     return stylishWithLevel($tree, 0);
 }

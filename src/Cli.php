@@ -1,9 +1,10 @@
 <?php
 
-namespace Differ\Doc;
+namespace Differ\Cli;
 
 use Docopt;
 
+use function cli\line;
 use function Differ\Differ\genDiff;
 
 use const Differ\Formatters\STYLISH;
@@ -25,7 +26,7 @@ Options:
 DOCOPT;
 }
 
-function run(): void
+function run(): bool
 {
     $params = [
         'help' => true,
@@ -33,9 +34,7 @@ function run(): void
     ];
 
     $args = Docopt::handle(getDoc(), $params);
-    if (isset($args['<firstFile>'])) {
-        $formatName = $args['--format'] ?? STYLISH;
-        $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $formatName);
-        print_r($diff);
-    }
+    $formatName = $args['--format'] ?? STYLISH;
+    $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $formatName);
+    return print_r($diff);
 }

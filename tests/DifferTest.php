@@ -1,15 +1,18 @@
 <?php
 
+namespace Differ\Tests;
+
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
+
 use const Differ\Formatters\JSON;
 use const Differ\Formatters\PLAIN;
 use const Differ\Formatters\STYLISH;
 
 class DifferTest extends TestCase
 {
-    public function test_genDiff_complexJson()
+    public function testGenDiffComplexJson()
     {
         $expectedDiff = <<<'EOD'
 {
@@ -65,7 +68,7 @@ EOD;
         $this->assertEquals($expectedDiff, $actualDiff);
     }
 
-    public function test_genDiff_complexYaml()
+    public function testGenDiffComplexYaml()
     {
         $expectedDiff = <<<'EOD'
 {
@@ -114,7 +117,7 @@ EOD;
         $this->assertEquals($expectedDiff, $actualDiff);
     }
 
-    public function test_genDiff_complexJson_plainFormat()
+    public function testGenDiffPlainFormat()
     {
         $expectedDiff = <<<'EOD'
 Property 'common.follow' was added with value: false
@@ -137,7 +140,7 @@ EOD;
         $this->assertEquals($expectedDiff, $actualDiff);
     }
 
-    public function test_genDiff_complexJson_jsonFormat()
+    public function testGenDiffJsonFormat()
     {
         $expectedDiff = file_get_contents($this->getAbsFilePath('diffComplexData.json'));
         $actualDiff = genDiff(

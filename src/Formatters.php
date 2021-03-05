@@ -4,7 +4,7 @@ namespace Differ\Formatters;
 
 use function Differ\Formatters\Json\formattedToJson;
 use function Differ\Formatters\Plain\formattedToPlain;
-use function Differ\Formatters\Stylish\stylish;
+use function Differ\Formatters\Stylish\formattedToStylish;
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
@@ -23,7 +23,7 @@ function getFormatter(string $formatName): callable
             };
         default:
             return function (array $tree): string {
-                return stylish($tree);
+                return formattedToStylish($tree);
             };
     }
 }

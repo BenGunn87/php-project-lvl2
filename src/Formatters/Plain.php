@@ -30,29 +30,34 @@ function valueToString($value): string
 
 function formattedNode(array $node, string $path): string
 {
-    ['key' => $key, 'action' => $action, 'value' => $value] = $node;
+    ['key' => $key, 'action' => $action] = $node;
+    $propertyFullName = "{$path}{$key}";
+    if ($action === COMPLEX_VALUE) {
+        $children = $node['children'];
+        return formattedToPlainIterator($children, "$propertyFullName.");
+    }
+    $preparedValue = valueToString($node['value']);
     switch ($action) {
         case ADDED:
-            return "Property '{$path}{$key}' was added with value: " . valueToString($value);
+            $result = "Property '$propertyFullName' was added with value: $preparedValue";
+            break;
         case REMOVED:
-            return "Property '{$path}{$key}' was removed";
+            $result = "Property '$propertyFullName' was removed";
+            break;
         case UPDATED:
             $newValue = $node['newValue'];
-            return "Property '{$path}{$key}' was updated. From " . valueToString($value) .
-                " to " . valueToString($newValue);
-        case COMPLEX_VALUE:
-            return formattedToPlainIterator($value, "{$path}{$key}.");
-        default:
-            return "";
+            $result = "Property '$propertyFullName' was updated. From $preparedValue to " . valueToString($newValue);
+            break;
     }
+    return $result ?? "";
 }
 
 function formattedToPlainIterator(array $tree, string $path): string
 {
-    $result = array_map(function ($node) use ($path) {
+    $formattedData = array_map(function ($node) use ($path): string {
         return formattedNode($node, $path);
     }, $tree);
-    $result = array_filter($result, function ($item) {
+    $result = array_filter($formattedData, function ($item): bool {
         return $item !== '';
     });
     return implode(PHP_EOL, $result);

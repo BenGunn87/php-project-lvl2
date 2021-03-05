@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 
 function getParser(string $format): callable
 {
-    if ($format === 'yml') {
+    if ($format === 'yml' || $format === 'yaml') {
         return function (string $data): object {
             return Yaml::parse($data, Yaml::PARSE_OBJECT_FOR_MAP);
         };

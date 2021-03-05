@@ -2,7 +2,7 @@
     {
         "key": "common",
         "action": "complexValue",
-        "value": [
+        "children": [
             {
                 "key": "follow",
                 "action": "added",
@@ -39,11 +39,11 @@
             {
                 "key": "setting6",
                 "action": "complexValue",
-                "value": [
+                "children": [
                     {
                         "key": "doge",
                         "action": "complexValue",
-                        "value": [
+                        "children": [
                             {
                                 "key": "wow",
                                 "action": "updated",
@@ -69,7 +69,7 @@
     {
         "key": "group1",
         "action": "complexValue",
-        "value": [
+        "children": [
             {
                 "key": "baz",
                 "action": "updated",
