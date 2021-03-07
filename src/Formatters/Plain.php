@@ -54,12 +54,8 @@ function formattedNode(array $node, string $path): string
 
 function formattedToPlainIterator(array $tree, string $path): string
 {
-    $formattedData = array_map(function ($node) use ($path): string {
-        return formattedNode($node, $path);
-    }, $tree);
-    $result = array_filter($formattedData, function ($item): bool {
-        return $item !== '';
-    });
+    $formattedData = array_map(fn($node): string => formattedNode($node, $path), $tree);
+    $result = array_filter($formattedData, fn($item): bool => $item !== '');
     return implode(PHP_EOL, $result);
 }
 

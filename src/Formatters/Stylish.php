@@ -18,17 +18,11 @@ function objectToString($value, int $level = 0): string
     $indentForValue = str_repeat(INDENT_CHARS, $level + 1);
     $preparedData = (array) $value;
     $result = array_map(
-        function (string $key, $item) use ($indentForValue, $level): string {
-            return "{$indentForValue}{$key}: " . valueToString($item, $level);
-        },
-        array_keys($preparedData),
-        $preparedData
+        fn(string $key): string => "{$indentForValue}{$key}: " . valueToString($preparedData[$key], $level),
+        array_keys($preparedData)
     );
 
-    return implode(
-        PHP_EOL,
-        array_merge(["{"], $result, ["$indent}"])
-    );
+    return implode(PHP_EOL, ["{", ...$result, "$indent}"]);
 }
 
 function simpleValueToString($value): string
@@ -58,21 +52,21 @@ function stylishNode(array $node, int $level): string
         return $indent . NOT_CHANGED_ITEM_PREFIX . "$key: " . stylishWithLevel($children, $level + 1);
     }
 
-    $preparedValue = valueToString($node['value'], $level);
+    $preparedNodeValue = "$key: " . valueToString($node['value'], $level);
     switch ($action) {
         case ADDED:
-            $result = $indent . ADDED_ITEM_PREFIX . "$key: $preparedValue";
+            $result = $indent . ADDED_ITEM_PREFIX . $preparedNodeValue;
             break;
         case REMOVED:
-            $result = $indent . REMOVED_ITEM_PREFIX . "$key: $preparedValue";
+            $result = $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue;
             break;
         case UPDATED:
             $newValue = $node['newValue'];
-            $result = $indent . REMOVED_ITEM_PREFIX . "$key: $preparedValue" . PHP_EOL .
+            $result = $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue . PHP_EOL .
                 $indent . ADDED_ITEM_PREFIX . "$key: " . valueToString($newValue, $level);
             break;
         default:
-            $result = $indent . NOT_CHANGED_ITEM_PREFIX . "$key: $preparedValue";
+            $result = $indent . NOT_CHANGED_ITEM_PREFIX . $preparedNodeValue;
     }
 
     return $result;
@@ -80,14 +74,9 @@ function stylishNode(array $node, int $level): string
 
 function stylishWithLevel(array $tree, int $level): string
 {
-    $result = array_map(function ($node) use ($level): string {
-        return stylishNode($node, $level);
-    }, $tree);
     $indent = str_repeat(INDENT_CHARS, $level);
-    return implode(
-        PHP_EOL,
-        array_merge(['{'], $result, ["$indent}"])
-    );
+    $result = array_map(fn($node): string => stylishNode($node, $level), $tree);
+    return implode(PHP_EOL, ['{', ...$result, "$indent}"]);
 }
 
 function formattedToStylish(array $tree): string

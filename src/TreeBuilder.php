@@ -3,7 +3,6 @@
 namespace Differ\TreeBuilder;
 
 use function Funct\Collection\sortBy;
-use function Funct\Collection\zip;
 
 const ADDED = 'added';
 const REMOVED = 'removed';
@@ -48,11 +47,7 @@ function processElem(string $key, $value, array $oldData, array $newData): array
     } elseif ($value === $oldData[$key]) {
         $result = createTreeNode($key, $value, NOT_CHANGED);
     } elseif (is_object($value) && is_object($oldData[$key])) {
-        $result = createTreeNodeWithChildren(
-            $key,
-            createDiffTree($oldData[$key], $value),
-            COMPLEX_VALUE
-        );
+        $result = createTreeNodeWithChildren($key, createDiffTree($oldData[$key], $value), COMPLEX_VALUE);
     } else {
         $result = createUpdatedTreeNode($key, $oldData[$key], $value);
     }
@@ -62,13 +57,11 @@ function processElem(string $key, $value, array $oldData, array $newData): array
 function getUnionData(array $oldData, array $newData): array
 {
     $union = array_merge($oldData, $newData);
-    $preparedUnionData = array_map(function (string $key, $value): array {
-        return [$key, $value];
-    }, array_keys($union), $union);
-    $sortedData = sortBy($preparedUnionData, function (array $item): string {
-        [$key] = $item;
-        return $key;
-    });
+    $preparedUnionData = array_map(
+        fn(string $key): array => ['key' => $key, 'value' => $union[$key]],
+        array_keys($union)
+    );
+    $sortedData = sortBy($preparedUnionData, fn(array $item): string => $item['key']);
     return array_values($sortedData);
 }
 
@@ -78,10 +71,7 @@ function createDiffTree(object $oldData, object $newData): array
     $preparedNewData = (array) $newData;
     $unionData = getUnionData($preparedOldData, $preparedNewData);
     return array_map(
-        function (array $item) use ($preparedOldData, $preparedNewData): array {
-            [$key, $value] = $item;
-            return processElem($key, $value, $preparedOldData, $preparedNewData);
-        },
+        fn(array $item): array => processElem($item['key'], $item['value'], $preparedOldData, $preparedNewData),
         $unionData
     );
 }

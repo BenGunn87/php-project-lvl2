@@ -14,16 +14,10 @@ function getFormatter(string $formatName): callable
 {
     switch ($formatName) {
         case PLAIN:
-            return function (array $tree): string {
-                return formattedToPlain($tree);
-            };
+            return fn(array $tree): string => formattedToPlain($tree);
         case JSON:
-            return function (array $tree): string {
-                return formattedToJson($tree);
-            };
+            return fn(array $tree): string => formattedToJson($tree);
         default:
-            return function (array $tree): string {
-                return formattedToStylish($tree);
-            };
+            return fn(array $tree): string => formattedToStylish($tree);
     }
 }
