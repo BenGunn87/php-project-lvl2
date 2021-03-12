@@ -20,7 +20,9 @@ function getDataFromFile(string $path): object
     } catch (Exception $e) {
         throw new Exception("'$path' " . BAD_FILE_NAME);
     }
-
+    if ($content === false) {
+        throw new Exception("'$path' " . BAD_FILE_NAME);
+    }
     $ext = pathinfo($path, PATHINFO_EXTENSION);
     return parse($content, $ext);
 }
