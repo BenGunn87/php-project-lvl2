@@ -4,7 +4,7 @@ common:
   setting6:
     key: value
     doge:
-      wow: ''
+      wow: '1'
 group1:
   baz: bas
   nest:

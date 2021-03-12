@@ -34,7 +34,7 @@ function createTreeNodeWithChildren(string $key, array $children, string $action
     return [
         'key' => $key,
         'action' => $action,
-        'children' => $children,
+        'children' => array_values($children),
     ];
 }
 
@@ -54,24 +54,15 @@ function processElem(string $key, $value, array $oldData, array $newData): array
     return $result;
 }
 
-function getUnionData(array $oldData, array $newData): array
-{
-    $union = array_merge($oldData, $newData);
-    $preparedUnionData = array_map(
-        fn(string $key): array => ['key' => $key, 'value' => $union[$key]],
-        array_keys($union)
-    );
-    $sortedData = sortBy($preparedUnionData, fn(array $item): string => $item['key']);
-    return array_values($sortedData);
-}
-
 function createDiffTree(object $oldData, object $newData): array
 {
     $preparedOldData = (array) $oldData;
     $preparedNewData = (array) $newData;
-    $unionData = getUnionData($preparedOldData, $preparedNewData);
+    $union = array_merge($preparedOldData, $preparedNewData);
+    $sortedKey = sortBy(array_keys($union), fn(string $item): string => $item);
+
     return array_map(
-        fn(array $item): array => processElem($item['key'], $item['value'], $preparedOldData, $preparedNewData),
-        $unionData
+        fn(string $key): array => processElem($key, $union[$key], $preparedOldData, $preparedNewData),
+        $sortedKey
     );
 }

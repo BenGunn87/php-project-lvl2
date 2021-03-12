@@ -6,60 +6,18 @@ use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
 
+use const Differ\Differ\BAD_FILE_NAME;
+use const Differ\Formatters\BAD_FORMAT_EXCEPTION;
 use const Differ\Formatters\JSON;
 use const Differ\Formatters\PLAIN;
 use const Differ\Formatters\STYLISH;
+use const Differ\Parsers\BAD_DATA_FORMAT;
 
 class DifferTest extends TestCase
 {
     public function testGenDiffComplexJson()
     {
-        $expectedDiff = <<<'EOD'
-{
-    common: {
-      + follow: false
-        setting1: Value 1
-      - setting2: 200
-      - setting3: true
-      + setting3: null
-      + setting4: blah blah
-      + setting5: {
-            key5: value5
-        }
-        setting6: {
-            doge: {
-              - wow: 
-              + wow: so much
-            }
-            key: value
-          + ops: vops
-        }
-    }
-    group1: {
-      - baz: bas
-      + baz: bars
-        foo: bar
-      - nest: {
-            key: value
-        }
-      + nest: str
-    }
-  - group2: {
-        abc: 12345
-        deep: {
-            id: 45
-        }
-    }
-  + group3: {
-        deep: {
-            id: {
-                number: 45
-            }
-        }
-        fee: 100500
-    }
-}
-EOD;
+        $expectedDiff = file_get_contents($this->getAbsFilePath('expectedDiffComplexDataJson.txt'));
         $actualDiff = genDiff(
             $this->getAbsFilePath('oldComplexData.json'),
             $this->getAbsFilePath('newComplexData.json'),
@@ -70,45 +28,7 @@ EOD;
 
     public function testGenDiffComplexYaml()
     {
-        $expectedDiff = <<<'EOD'
-{
-    common: {
-      + follow: false
-        setting1: Value 1
-      + setting5: {
-            key5: value5
-        }
-        setting6: {
-            doge: {
-              - wow: 
-              + wow: so much
-            }
-            key: value
-          + ops: vops
-        }
-    }
-    group1: {
-      - baz: bas
-      + foo: bar
-      - nest: {
-            key: value
-        }
-    }
-  - group2: {
-        abc: 12345
-        deep: {
-            id: 45
-        }
-    }
-  + group3: {
-        deep: {
-            id: {
-                number: 45
-            }
-        }
-    }
-}
-EOD;
+        $expectedDiff = file_get_contents($this->getAbsFilePath('expectedDiffComplexDataYml.txt'));
         $actualDiff = genDiff(
             $this->getAbsFilePath('oldComplexData.yml'),
             $this->getAbsFilePath('newComplexData.yml'),
@@ -119,19 +39,7 @@ EOD;
 
     public function testGenDiffPlainFormat()
     {
-        $expectedDiff = <<<'EOD'
-Property 'common.follow' was added with value: false
-Property 'common.setting2' was removed
-Property 'common.setting3' was updated. From true to null
-Property 'common.setting4' was added with value: 'blah blah'
-Property 'common.setting5' was added with value: [complex value]
-Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
-Property 'common.setting6.ops' was added with value: 'vops'
-Property 'group1.baz' was updated. From 'bas' to 'bars'
-Property 'group1.nest' was updated. From [complex value] to 'str'
-Property 'group2' was removed
-Property 'group3' was added with value: [complex value]
-EOD;
+        $expectedDiff = file_get_contents($this->getAbsFilePath('expectedDiffPlainFormat.txt'));
         $actualDiff = genDiff(
             $this->getAbsFilePath('oldComplexData.json'),
             $this->getAbsFilePath('newComplexData.json'),
@@ -149,6 +57,36 @@ EOD;
             JSON
         );
         $this->assertEquals($expectedDiff, $actualDiff);
+    }
+
+    public function testGenDiffBadFormat()
+    {
+        $this->expectExceptionMessage(BAD_FORMAT_EXCEPTION);
+        genDiff(
+            $this->getAbsFilePath('oldComplexData.json'),
+            $this->getAbsFilePath('newComplexData.json'),
+            'test'
+        );
+    }
+
+    public function testGenDiffBadFileFormat()
+    {
+        $this->expectExceptionMessage(BAD_DATA_FORMAT);
+        genDiff(
+            $this->getAbsFilePath('badFileFormat.jsn'),
+            $this->getAbsFilePath('badFileFormat.jsn'),
+            JSON
+        );
+    }
+
+    public function testGenDiffBadFileName()
+    {
+        $this->expectExceptionMessage(BAD_FILE_NAME);
+        genDiff(
+            $this->getAbsFilePath('test.json'),
+            $this->getAbsFilePath('test.json'),
+            JSON
+        );
     }
 
     private function getAbsFilePath(string $path): string

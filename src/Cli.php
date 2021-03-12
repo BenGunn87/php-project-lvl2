@@ -3,8 +3,8 @@
 namespace Differ\Cli;
 
 use Docopt;
+use Exception;
 
-use function cli\line;
 use function Differ\Differ\genDiff;
 
 use const Differ\Formatters\STYLISH;
@@ -35,6 +35,10 @@ function run(): bool
 
     $args = Docopt::handle(getDoc(), $params);
     $formatName = $args['--format'] ?? STYLISH;
-    $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $formatName);
-    return print_r($diff);
+    try {
+        $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $formatName);
+        return print_r($diff);
+    } catch (Exception $exception) {
+        return print_r("Error: " . $exception->getMessage());
+    }
 }

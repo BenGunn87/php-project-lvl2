@@ -47,7 +47,7 @@
                             {
                                 "key": "wow",
                                 "action": "updated",
-                                "value": "",
+                                "value": "1",
                                 "newValue": "so much"
                             }
                         ]
