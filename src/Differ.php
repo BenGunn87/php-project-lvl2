@@ -15,16 +15,12 @@ const BAD_FILE_NAME = 'File not found.';
 function getDataFromFile(string $path): object
 {
     $absolutePath = $path[0] === '/' ? $path : getcwd() . "/$path";
-    try {
-        $content = file_get_contents($absolutePath);
-    } catch (Exception $e) {
+    if (!file_exists($absolutePath)) {
         throw new Exception("'$path' " . BAD_FILE_NAME);
     }
-    if ($content === false) {
-        throw new Exception("'$path' " . BAD_FILE_NAME);
-    }
+    $content = file_get_contents($absolutePath);
     $ext = pathinfo($path, PATHINFO_EXTENSION);
-    return parse($content, $ext);
+    return parse((string) $content, $ext);
 }
 
 function genDiff(string $pathToOldFile, string $pathToNewFile, string $formatName = STYLISH): string
