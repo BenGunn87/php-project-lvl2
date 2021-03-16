@@ -2,7 +2,7 @@
 
 namespace Differ\TreeBuilder;
 
-use function Funct\Collection\sortBy;
+use function Functional\sort;
 
 const ADDED = 'added';
 const REMOVED = 'removed';
@@ -59,7 +59,7 @@ function createDiffTree(object $oldData, object $newData): array
     $preparedOldData = (array) $oldData;
     $preparedNewData = (array) $newData;
     $union = array_merge($preparedOldData, $preparedNewData);
-    $sortedKey = sortBy(array_keys($union), fn(string $item): string => $item);
+    $sortedKey = sort(array_keys($union), fn(string $left, string $right): int => $left <=> $right);
 
     return array_map(
         fn(string $key): array => processElem($key, $union[$key], $preparedOldData, $preparedNewData),
