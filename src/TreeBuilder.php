@@ -58,11 +58,11 @@ function createDiffTree(object $oldData, object $newData): array
 {
     $preparedOldData = (array) $oldData;
     $preparedNewData = (array) $newData;
-    $union = array_merge($preparedOldData, $preparedNewData);
-    $sortedKey = sort(array_keys($union), fn(string $left, string $right): int => $left <=> $right);
+    $unionAllData = array_merge($preparedOldData, $preparedNewData);
+    $sortedKey = sort(array_keys($unionAllData), fn(string $left, string $right): int => $left <=> $right);
 
     return array_map(
-        fn(string $key): array => processElem($key, $union[$key], $preparedOldData, $preparedNewData),
+        fn(string $key): array => processElem($key, $unionAllData[$key], $preparedOldData, $preparedNewData),
         $sortedKey
     );
 }

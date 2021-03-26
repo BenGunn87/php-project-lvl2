@@ -2,8 +2,11 @@
 
 namespace Differ\Formatters\Stylish;
 
+use Exception;
+
 use const Differ\TreeBuilder\ADDED;
 use const Differ\TreeBuilder\COMPLEX_VALUE;
+use const Differ\TreeBuilder\NOT_CHANGED;
 use const Differ\TreeBuilder\REMOVED;
 use const Differ\TreeBuilder\UPDATED;
 
@@ -11,6 +14,7 @@ const INDENT_CHARS = '    ';
 const ADDED_ITEM_PREFIX = '  + ';
 const REMOVED_ITEM_PREFIX = '  - ';
 const NOT_CHANGED_ITEM_PREFIX = INDENT_CHARS;
+const BAD_NODE_ACTION = 'Node action not supported.';
 
 function objectToString($value, int $level = 0): string
 {
@@ -47,29 +51,25 @@ function stylishNode(array $node, int $level): string
 {
     ['key' => $key, 'action' => $action] = $node;
     $indent = str_repeat(INDENT_CHARS, $level);
-    if ($action === COMPLEX_VALUE) {
-        $children = $node['children'];
-        return $indent . NOT_CHANGED_ITEM_PREFIX . "$key: " . stylishWithLevel($children, $level + 1);
-    }
 
-    $preparedNodeValue = "$key: " . valueToString($node['value'], $level);
+    $preparedNodeValue = "$key: " . valueToString($node['value'] ?? '', $level);
     switch ($action) {
         case ADDED:
-            $result = $indent . ADDED_ITEM_PREFIX . $preparedNodeValue;
-            break;
+            return $indent . ADDED_ITEM_PREFIX . $preparedNodeValue;
         case REMOVED:
-            $result = $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue;
-            break;
+            return $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue;
         case UPDATED:
             $newValue = $node['newValue'];
-            $result = $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue . PHP_EOL .
+            return $indent . REMOVED_ITEM_PREFIX . $preparedNodeValue . PHP_EOL .
                 $indent . ADDED_ITEM_PREFIX . "$key: " . valueToString($newValue, $level);
-            break;
+        case COMPLEX_VALUE:
+            $children = $node['children'];
+            return $indent . NOT_CHANGED_ITEM_PREFIX . "$key: " . stylishWithLevel($children, $level + 1);
+        case NOT_CHANGED:
+            return $indent . NOT_CHANGED_ITEM_PREFIX . $preparedNodeValue;
         default:
-            $result = $indent . NOT_CHANGED_ITEM_PREFIX . $preparedNodeValue;
+            throw new Exception("'$action' " . BAD_NODE_ACTION);
     }
-
-    return $result;
 }
 
 function stylishWithLevel(array $tree, int $level): string
