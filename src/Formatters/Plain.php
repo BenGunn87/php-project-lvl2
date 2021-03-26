@@ -36,7 +36,7 @@ function formattedNode(array $node, string $path): string
 {
     ['key' => $key, 'action' => $action] = $node;
     $propertyFullName = "{$path}{$key}";
-    $value = isset($node['value']) ? $node['value'] : '';
+    $value = array_key_exists('value', $node) ? $node['value'] : '';
     $preparedValue = valueToString($value);
     switch ($action) {
         case ADDED:
