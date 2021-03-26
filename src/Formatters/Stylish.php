@@ -51,8 +51,8 @@ function stylishNode(array $node, int $level): string
 {
     ['key' => $key, 'action' => $action] = $node;
     $indent = str_repeat(INDENT_CHARS, $level);
-
-    $preparedNodeValue = "$key: " . valueToString($node['value'] ?? '', $level);
+    $value = isset($node['value']) ? $node['value'] : '';
+    $preparedNodeValue = "$key: " . valueToString($value, $level);
     switch ($action) {
         case ADDED:
             return $indent . ADDED_ITEM_PREFIX . $preparedNodeValue;
