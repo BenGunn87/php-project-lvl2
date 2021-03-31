@@ -41,17 +41,18 @@ function createTreeNodeWithChildren(string $key, array $children, string $action
 function processElem(string $key, $value, array $oldData, array $newData): array
 {
     if (!array_key_exists($key, $oldData)) {
-        $result = createTreeNode($key, $value, ADDED);
-    } elseif (!array_key_exists($key, $newData)) {
-        $result = createTreeNode($key, $value, REMOVED);
-    } elseif ($value === $oldData[$key]) {
-        $result = createTreeNode($key, $value, NOT_CHANGED);
-    } elseif (is_object($value) && is_object($oldData[$key])) {
-        $result = createTreeNodeWithChildren($key, createDiffTree($oldData[$key], $value), COMPLEX_VALUE);
-    } else {
-        $result = createUpdatedTreeNode($key, $oldData[$key], $value);
+        return createTreeNode($key, $value, ADDED);
     }
-    return $result;
+    if (!array_key_exists($key, $newData)) {
+        return createTreeNode($key, $value, REMOVED);
+    }
+    if ($value === $oldData[$key]) {
+        return createTreeNode($key, $value, NOT_CHANGED);
+    }
+    if (is_object($value) && is_object($oldData[$key])) {
+        return createTreeNodeWithChildren($key, createDiffTree($oldData[$key], $value), COMPLEX_VALUE);
+    }
+    return createUpdatedTreeNode($key, $oldData[$key], $value);
 }
 
 function createDiffTree(object $oldData, object $newData): array
