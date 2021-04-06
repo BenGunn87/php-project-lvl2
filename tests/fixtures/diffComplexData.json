@@ -1,52 +1,52 @@
 [
     {
         "key": "common",
-        "action": "complexValue",
+        "type": "complexValue",
         "children": [
             {
                 "key": "follow",
-                "action": "added",
+                "type": "added",
                 "value": false
             },
             {
                 "key": "setting1",
-                "action": "notChanged",
+                "type": "notChanged",
                 "value": "Value 1"
             },
             {
                 "key": "setting2",
-                "action": "removed",
+                "type": "removed",
                 "value": 200
             },
             {
                 "key": "setting3",
-                "action": "updated",
+                "type": "updated",
                 "value": true,
                 "newValue": null
             },
             {
                 "key": "setting4",
-                "action": "added",
+                "type": "added",
                 "value": "blah blah"
             },
             {
                 "key": "setting5",
-                "action": "added",
+                "type": "added",
                 "value": {
                     "key5": "value5"
                 }
             },
             {
                 "key": "setting6",
-                "action": "complexValue",
+                "type": "complexValue",
                 "children": [
                     {
                         "key": "doge",
-                        "action": "complexValue",
+                        "type": "complexValue",
                         "children": [
                             {
                                 "key": "wow",
-                                "action": "updated",
+                                "type": "updated",
                                 "value": "1",
                                 "newValue": "so much"
                             }
@@ -54,12 +54,12 @@
                     },
                     {
                         "key": "key",
-                        "action": "notChanged",
+                        "type": "notChanged",
                         "value": "value"
                     },
                     {
                         "key": "ops",
-                        "action": "added",
+                        "type": "added",
                         "value": "vops"
                     }
                 ]
@@ -68,22 +68,22 @@
     },
     {
         "key": "group1",
-        "action": "complexValue",
+        "type": "complexValue",
         "children": [
             {
                 "key": "baz",
-                "action": "updated",
+                "type": "updated",
                 "value": "bas",
                 "newValue": "bars"
             },
             {
                 "key": "foo",
-                "action": "notChanged",
+                "type": "notChanged",
                 "value": "bar"
             },
             {
                 "key": "nest",
-                "action": "updated",
+                "type": "updated",
                 "value": {
                     "key": "value"
                 },
@@ -93,7 +93,7 @@
     },
     {
         "key": "group2",
-        "action": "removed",
+        "type": "removed",
         "value": {
             "abc": 12345,
             "deep": {
@@ -103,7 +103,7 @@
     },
     {
         "key": "group3",
-        "action": "added",
+        "type": "added",
         "value": {
             "deep": {
                 "id": {

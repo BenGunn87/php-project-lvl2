@@ -4,7 +4,7 @@ namespace Differ\Differ;
 
 use Exception;
 
-use function Differ\Formatters\getFormatter;
+use function Differ\Formatters\getRender;
 use function Differ\Parsers\parse;
 use function Differ\TreeBuilder\createDiffTree;
 
@@ -28,6 +28,6 @@ function genDiff(string $pathToOldFile, string $pathToNewFile, string $formatNam
     $oldData = getDataFromFile($pathToOldFile);
     $newData = getDataFromFile($pathToNewFile);
     $diffTree = createDiffTree($oldData, $newData);
-    $formatter = getFormatter($formatName);
-    return $formatter($diffTree);
+    $render = getRender($formatName);
+    return $render($diffTree);
 }

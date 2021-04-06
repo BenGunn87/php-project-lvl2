@@ -14,7 +14,7 @@ const INDENT_CHARS = '    ';
 const ADDED_ITEM_PREFIX = '  + ';
 const REMOVED_ITEM_PREFIX = '  - ';
 const NOT_CHANGED_ITEM_PREFIX = INDENT_CHARS;
-const BAD_NODE_ACTION = 'Node action not supported.';
+const BAD_NODE_TYPE = 'Node type not supported.';
 
 function objectToString($value, int $level = 0): string
 {
@@ -49,11 +49,11 @@ function valueToString($value, int $level = 0): string
 
 function stylishNode(array $node, int $level): string
 {
-    ['key' => $key, 'action' => $action] = $node;
+    ['key' => $key, 'type' => $type] = $node;
     $indent = str_repeat(INDENT_CHARS, $level);
     $value = array_key_exists('value', $node) ? $node['value'] : '';
     $preparedNodeValue = "$key: " . valueToString($value, $level);
-    switch ($action) {
+    switch ($type) {
         case ADDED:
             return $indent . ADDED_ITEM_PREFIX . $preparedNodeValue;
         case REMOVED:
@@ -68,7 +68,7 @@ function stylishNode(array $node, int $level): string
         case NOT_CHANGED:
             return $indent . NOT_CHANGED_ITEM_PREFIX . $preparedNodeValue;
         default:
-            throw new Exception("'$action' " . BAD_NODE_ACTION);
+            throw new Exception("'$type' " . BAD_NODE_TYPE);
     }
 }
 
@@ -79,7 +79,7 @@ function stylishWithLevel(array $tree, int $level): string
     return implode(PHP_EOL, ['{', ...$result, "$indent}"]);
 }
 
-function formattedToStylish(array $tree): string
+function renderToStylish(array $tree): string
 {
     return stylishWithLevel($tree, 0);
 }

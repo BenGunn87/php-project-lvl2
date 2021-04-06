@@ -4,7 +4,7 @@ namespace Differ\Formatters\Plain;
 
 use Exception;
 
-use const Differ\Formatters\Stylish\BAD_NODE_ACTION;
+use const Differ\Formatters\Stylish\BAD_NODE_TYPE;
 use const Differ\TreeBuilder\ADDED;
 use const Differ\TreeBuilder\COMPLEX_VALUE;
 use const Differ\TreeBuilder\NOT_CHANGED;
@@ -32,13 +32,13 @@ function valueToString($value): string
         : simpleValueToString($value);
 }
 
-function formattedNode(array $node, string $path): string
+function renderNode(array $node, string $path): string
 {
-    ['key' => $key, 'action' => $action] = $node;
+    ['key' => $key, 'type' => $type] = $node;
     $propertyFullName = "{$path}{$key}";
     $value = array_key_exists('value', $node) ? $node['value'] : '';
     $preparedValue = valueToString($value);
-    switch ($action) {
+    switch ($type) {
         case ADDED:
             return "Property '$propertyFullName' was added with value: $preparedValue";
         case REMOVED:
@@ -48,22 +48,22 @@ function formattedNode(array $node, string $path): string
             return "Property '$propertyFullName' was updated. From $preparedValue to " . valueToString($newValue);
         case COMPLEX_VALUE:
             $children = $node['children'];
-            return formattedToPlainIterator($children, "$propertyFullName.");
+            return renderToPlainIterator($children, "$propertyFullName.");
         case NOT_CHANGED:
             return "";
         default:
-            throw new Exception("'$action' " . BAD_NODE_ACTION);
+            throw new Exception("'$type' " . BAD_NODE_TYPE);
     }
 }
 
-function formattedToPlainIterator(array $tree, string $path): string
+function renderToPlainIterator(array $tree, string $path): string
 {
-    $formattedData = array_map(fn($node): string => formattedNode($node, $path), $tree);
+    $formattedData = array_map(fn($node): string => renderNode($node, $path), $tree);
     $result = array_filter($formattedData, fn($item): bool => $item !== '');
     return implode(PHP_EOL, $result);
 }
 
-function formattedToPlain(array $tree): string
+function renderToPlain(array $tree): string
 {
-    return formattedToPlainIterator($tree, '');
+    return renderToPlainIterator($tree, '');
 }

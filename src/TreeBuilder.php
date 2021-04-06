@@ -10,11 +10,11 @@ const UPDATED = 'updated';
 const NOT_CHANGED = 'notChanged';
 const COMPLEX_VALUE = 'complexValue';
 
-function createTreeNode(string $key, $value, string $action): array
+function createTreeNode(string $key, $value, string $type): array
 {
     return [
         'key' => $key,
-        'action' => $action,
+        'type' => $type,
         'value' => $value,
     ];
 }
@@ -23,17 +23,17 @@ function createUpdatedTreeNode(string $key, $value, $newValue): array
 {
     return [
         'key' => $key,
-        'action' => UPDATED,
+        'type' => UPDATED,
         'value' => $value,
         'newValue' => $newValue,
     ];
 }
 
-function createTreeNodeWithChildren(string $key, array $children, string $action): array
+function createTreeNodeWithChildren(string $key, array $children, string $type): array
 {
     return [
         'key' => $key,
-        'action' => $action,
+        'type' => $type,
         'children' => array_values($children),
     ];
 }
